@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +27,7 @@ import java.util.Map;
 
 public class FetchData extends AsyncTask<String,String,String> {
     String data;
+    String result;
     String _organizationId;
     String _grantId;
     String organizationRoot;
@@ -38,11 +40,12 @@ public class FetchData extends AsyncTask<String,String,String> {
     protected String doInBackground(String... params) {
         try {
             data="";
+            result="";
             String credentialData = params[0];
             JSONObject requestParams=new JSONObject();
-            requestParams.put("username","");
+            requestParams.put("username","sahinkasap");
             URL url = new URL("https://odtupass-dev.metu.edu.tr/auth/user");
-
+            data+="*0*";
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setRequestProperty("content-type","application/json");
@@ -54,16 +57,18 @@ public class FetchData extends AsyncTask<String,String,String> {
             bufferedWriter.flush();
             bufferedWriter.close();
             outputStream.close();
-
+            data+="*1*";
             InputStream inputStream = httpURLConnection.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            String jsonResult = "";
             String line = "";
             while(line!=null){
                 line = bufferedReader.readLine();
-                data += line;
+                jsonResult += line;
             }
-            MainActivity.mainPageText.setText(data);
-            JSONObject returnsFromInit = new JSONObject(data);
+            data+="*2*";
+            //MainActivity.txtTagContent.setText(data);
+            JSONObject returnsFromInit = new JSONObject(jsonResult);
             JSONArray organizations = returnsFromInit.getJSONArray("organizations");
             JSONObject organization = organizations.getJSONObject(0);
             _organizationId = organization.getString("id");
@@ -77,7 +82,7 @@ public class FetchData extends AsyncTask<String,String,String> {
             httpURLConnection.setRequestProperty("user-agent","armon-api-android-client");
             outputStream = httpURLConnection.getOutputStream();
             bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
-            requestParams.put("password","");
+            requestParams.put("password","uWb1QnKB");
             bufferedWriter.write(requestParams.toString());
             bufferedWriter.flush();
             bufferedWriter.close();
@@ -109,14 +114,13 @@ public class FetchData extends AsyncTask<String,String,String> {
             httpURLConnection2.setRequestProperty("user-agent","armon-api-android-client");
             httpURLConnection2.setRequestProperty("Authorization", "Bearer " + _token);
 
-            requestParams=null;
-            requestParams=new JSONObject();
-            requestParams.put("credentialType",0);
-            requestParams.put("credentialData",credentialData);
+            JSONObject requestParams1 = new JSONObject();
+            requestParams1.put("credentialType",0);
+            requestParams1.put("credentialData",credentialData);
 
             OutputStream outputStream1 = httpURLConnection2.getOutputStream();
             BufferedWriter bufferedWriter1 = new BufferedWriter(new OutputStreamWriter(outputStream1,"UTF-8"));
-            bufferedWriter1.write(requestParams.toString());
+            bufferedWriter1.write(requestParams1.toString());
             bufferedWriter1.flush();
             bufferedWriter1.close();
             outputStream1.close();
@@ -138,13 +142,11 @@ public class FetchData extends AsyncTask<String,String,String> {
             String uniqueId = credential.getJSONObject("member").getString("uniqueId");
             //boolean isDisabled = credential.getJSONObject("member").getBoolean("isDisabled");
             String firstOrganizationName = credential.getJSONObject("member").getJSONArray("organizationUnits").getJSONObject(0).getString("name");
-            data ="";
-            data +="FULL NAME: " + fullname+"\n";
-            data += "ID: " + uniqueId +"\n";
+            result +="FULL NAME: " + fullname+"\n";
+            result += "ID: " + uniqueId +"\n";
             //data += "Is Active: " + !isDisabled +"\n";
-            data += "Organization: " +firstOrganizationName;
-            MainActivity.mainPageText.setText(data);
-            url =new URL(organizationRoot + "/identity/detailed/" + id);
+            result += "Organization: " +firstOrganizationName;
+            /*url =new URL(organizationRoot + "/identity/detailed/" + id);
             HttpURLConnection httpURLConnection1 = (HttpURLConnection) url.openConnection();
             httpURLConnection1.setRequestMethod("GET");
             httpURLConnection1.setRequestProperty("content-type","application/json");
@@ -169,16 +171,22 @@ public class FetchData extends AsyncTask<String,String,String> {
             }*/
 
         } catch (MalformedURLException e) {
-            data=e.toString();
+            result+="MalformedURLException "  + e.toString();
+            //MainActivity.txtTagContent.setText(data);
             e.printStackTrace();
         } catch (IOException e) {
-            data="IOEXCEPTION"+e.toString();
+            result+="IOEXCEPTION "+e.toString();
+            //MainActivity.txtTagContent.setText(data);
             e.printStackTrace();
         } catch (JSONException e) {
-            data=e.toString();
+            result+="JSONEXCEPTION " + e.toString();
+            //MainActivity.txtTagContent.setText(data);
+
             e.printStackTrace();
         } catch(Exception e){
-            data = "ERROR + " + e.toString();
+            data += "ERROR + " + e.toString();
+            //MainActivity.txtTagContent.setText(data);
+            //ffhfghfh
         }
         return null;
     }
@@ -188,7 +196,8 @@ public class FetchData extends AsyncTask<String,String,String> {
     @Override
     protected void onPostExecute(String aVoid) {
         super.onPostExecute(aVoid);
-        MainActivity.txtTagContent.setText("EXECUTION DONE");
+        //MainActivity.txtTagContent.setText("EXECUTION DONE" + data);
+        MainActivity.mainPageText.setText(result+"");
 
     }
 

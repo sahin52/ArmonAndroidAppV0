@@ -89,8 +89,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FetchData fetchData = new FetchData();
-
-                fetchData.execute("E6DBDD3E");
+                try {
+                    fetchData.execute("E6DBDD3E");
+                }catch(Exception e){
+                    txtTagContent.setText(e.toString());
+                }
             }
         });
 
@@ -100,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this,"NFC ENABLED :)",Toast.LENGTH_SHORT).show();
         }else{
             Toast.makeText(this,"NFC NOT ENABLED :(",Toast.LENGTH_SHORT).show();
-            finish();
+            //finish();
         }
         tglReadWrite = findViewById(R.id.tglReadWrite);
         txtTagContent  =  findViewById(R.id.txtTagContent);
@@ -126,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                 mainPageText.setText(CardId);
                 FetchData fetchData = new FetchData();
                 fetchData.execute(CardId);
-
+                Toast.makeText(this,"Here",Toast.LENGTH_SHORT).show();
             }
             else{
                 Toast.makeText(this,"Unknown type of card",Toast.LENGTH_SHORT).show();

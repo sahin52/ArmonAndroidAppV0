@@ -73,6 +73,5 @@
         android:layout_marginStart="-3dp"
         android:layout_marginTop="1dp"
         android:layout_marginEnd="3dp"
-        android:text="Will be here"
         android:textSize="8sp" />
 </RelativeLayout>
