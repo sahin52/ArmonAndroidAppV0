@@ -11,8 +11,10 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
+import android.nfc.tech.NfcA;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -22,24 +24,57 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import javax.net.ssl.HttpsURLConnection;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+
+import android.nfc.tech.MifareClassic;
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
     private Button settingsbutton;
     private Button htmlReqButton;
     public static TextView mainPageText;
+    String organizationId;
+    String grantId;
+    String organizationRoot;
     ToggleButton tglReadWrite;
-    EditText txtTagContent;
+    public static EditText txtTagContent;
     NfcAdapter nfcAdapter;
+    String domain;
+    String username = "sahinkasap";
+    String password = "uWb1QnKB";
+    public String token;
+    public String refreshToken;
+    public String expiresIn;
+    public Map<String,String> requestHeaders;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestHeaders = new HashMap<>();
+        requestHeaders.put("content-type","application/json");
+        requestHeaders.put("user-agent","Sahin-Android");
         setContentView(R.layout.activity_main);
-
         settingsbutton = (Button) findViewById(R.id.settingsButton);
         settingsbutton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,7 +89,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FetchData fetchData = new FetchData();
-                fetchData.execute();
+
+                fetchData.execute("E6DBDD3E");
             }
         });
 
@@ -80,33 +116,23 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
+        String content="";
         super.onNewIntent(intent);
         if(intent.hasExtra(NfcAdapter.EXTRA_TAG)){
-            Toast.makeText(this,"Nfc intent received",Toast.LENGTH_SHORT).show();
-            if(tglReadWrite.isChecked()){
-                Parcelable[] parcelables = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-                if(parcelables!=null && parcelables.length>0){
-                    readTextFromMessage((NdefMessage)parcelables[0]);
-                }else{Toast.makeText(this,"Problem on Reading NFC",Toast.LENGTH_SHORT).show(); }
-            }else{
+            if(intent.getAction().equals(NfcAdapter.ACTION_TAG_DISCOVERED)){
                 Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-                NdefMessage ndefMessage = createNdefMessage(txtTagContent.getText()+"");
-                writeNdefMessage(tag,ndefMessage);
+                byte[] tagIdbytes = tag.getId();
+                String CardId = bytesToHex(tagIdbytes);
+                mainPageText.setText(CardId);
+                FetchData fetchData = new FetchData();
+                fetchData.execute(CardId);
+
             }
-
-
-
-        }
-    }
-
-    private void readTextFromMessage(NdefMessage ndefMessage) {
-        NdefRecord[] ndefRecords = ndefMessage.getRecords();
-        if(ndefRecords!=null && ndefRecords.length>0){
-            NdefRecord ndefRecord = ndefRecords[0];
-            String tagContent = getTextFromNdefRecord(ndefRecord);
-            txtTagContent.setText(tagContent);
+            else{
+                Toast.makeText(this,"Unknown type of card",Toast.LENGTH_SHORT).show();
+            }
         }else{
-            Toast.makeText(this,"Problem NFC reading, no NDEF records found",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Unknown type of intent",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -142,84 +168,142 @@ public class MainActivity extends AppCompatActivity {
     private void disableForegroundDispatchSystem(){
         nfcAdapter.disableForegroundDispatch(this);
     }
-    private void formatTag(Tag tag, NdefMessage ndefMessage){
-        try {
-            NdefFormatable ndefFormatable = NdefFormatable.get(tag) ;
-            if(ndefFormatable==null){
-                Toast.makeText(this,"Tag is not ndef formatable",Toast.LENGTH_SHORT).show();
-                return;
-            }
-            ndefFormatable.connect();
-            ndefFormatable.format(ndefMessage);
-            ndefFormatable.close();
-            Toast.makeText(this,"Tag writen! formatted",Toast.LENGTH_SHORT).show();
-        }catch (Exception e){
-            Log.e("FormatTag",e.getMessage());
-        }
-    }
-    private void writeNdefMessage(Tag tag, NdefMessage ndefMessage){
-        try{
-            if(tag==null){
-                Toast.makeText(this,"tag is null",Toast.LENGTH_SHORT).show();
-                return;
-            }
-            Ndef ndef=Ndef.get(tag);
-            if(ndef==null){
-                formatTag(tag,ndefMessage);
-            }else{
-                ndef.connect();
-                if(!ndef.isWritable()){
-                    Toast.makeText(this,"Tag is not writable",Toast.LENGTH_SHORT).show();
-                    ndef.close();
-                    return;
+
+    private String getUserDetail(final String number){
+        txtTagContent.setText("getUserDetail");
+        RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
+        final String domain = "https://odtupass-dev.metu.edu.tr";
+        this.domain = domain;
+        String url ="https://odtupass-dev.metu.edu.tr/auth/user";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                txtTagContent.setText(response);
+                try {
+                    JSONObject responseJson = new JSONObject(response);
+                    String jsonObject = responseJson.getString("organizations");
+                    JSONArray organizations = new JSONArray(jsonObject);
+                    JSONObject firstOrganization = organizations.getJSONObject(0);
+                    String organizationName = firstOrganization.getString("name");
+                    organizationId = firstOrganization.getString("id");
+                    grantId = (new JSONArray(firstOrganization.getString("authentications"))).getJSONObject(0).getString("id");
+                    organizationRoot = domain + "/u/v1/" + organizationId;
+                    txtTagContent.setText(organizationName + "=name \n orgid =  " + organizationId + "\n grantid = "+ grantId);
+                    login(number);
+
+                } catch (JSONException e) {
+                    txtTagContent.setText("ERROR");
+                    e.printStackTrace();
                 }
-                ndef.writeNdefMessage(ndefMessage);
-                ndef.close();
-                Toast.makeText(this,"Tag Written Successfully",Toast.LENGTH_SHORT).show();
             }
-        }catch (Exception e){
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String temp = error.getMessage() + " ERROR";
+                txtTagContent.setText(temp);
+            }
+        }){
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String, String> map = new HashMap<>();
+                map.put("username",username);
+                return map;
+            }
 
+
+        };
+        requestQueue.add(stringRequest);
+        return number;
+    }
+    private void login(final String number){
+        final RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
+        txtTagContent.setText("login");
+        final String url = domain + "/auth/usernamepass/" + grantId;
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                txtTagContent.setText(response);
+                try {
+                    JSONObject responseJson = new JSONObject(response);
+                    mainPageText.setText(response);
+                    refreshToken= responseJson.getString("refreshToken");
+                    expiresIn = responseJson.getString("expiresIn");
+                    token = responseJson.getString("token");
+                    requestHeaders.put("Authorization","Bearer "+token);
+                    getStudentInfo(number);
+                } catch (JSONException e) {
+                    txtTagContent.setText("response is not json");
+                    e.printStackTrace();
+                }catch(Exception e){
+                    txtTagContent.setText("error occurred");
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                try {
+                    txtTagContent.setText("ERROR ON LOGGING IN " + error.toString() + error.getMessage() + error.getCause() + error.networkResponse.statusCode
+                            +"\n" + url + (new JSONObject(error.networkResponse.data.toString())).toString() + " --- " + error.networkResponse.allHeaders);
+                } catch (JSONException e) {
+                    txtTagContent.setText("ERROR ON LOGGING IN " + error.toString() + error.getMessage() + error.getCause() + error.networkResponse.statusCode
+                            +"\n" + url + " -+- "+  error.networkResponse.data + " --- " + error.networkResponse.allHeaders);
+                }
+            }
+        }){
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> map = new HashMap<>();
+                map.put("username",username);
+                map.put("password",password);
+                return map;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return requestHeaders;
+            }
+        };
+
+        requestQueue.add(stringRequest);
+    }
+    private void getStudentInfo(String number){
+        RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
+        final String url = organizationRoot+"/identity/detailed/" +number ;
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                txtTagContent.setText(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                txtTagContent.setText("ERROR-getStudentInfo " + error.toString() + error.getMessage() + error.getCause() + error.networkResponse.statusCode
+                    +"\n" + url + error.networkResponse.data.toString() + " --- " + error.networkResponse.allHeaders
+                );
+
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return requestHeaders;
+            }
+        };
+        requestQueue.add(stringRequest);
+    }
+    public void toast(String message){
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+    }
+
+    private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
+    public static String bytesToHex(byte[] bytes) {
+        char[] hexChars = new char[bytes.length * 2];
+        for (int j = 0; j < bytes.length; j++) {
+            int v = bytes[j] & 0xFF;
+            int place = bytes.length-j-1;
+            hexChars[place * 2] = HEX_ARRAY[v >>> 4];
+            hexChars[place * 2 + 1] = HEX_ARRAY[v & 0x0F];
         }
+        return new String(hexChars);
     }
-    private NdefRecord createTextRecord(String content) {
-        try {
-            byte[] language;
-            language = Locale.getDefault().getLanguage().getBytes("UTF-8");
-
-            final byte[] text = content.getBytes("UTF-8");
-            final int languageSize = language.length;
-            final int textLength = text.length;
-            final ByteArrayOutputStream payload = new ByteArrayOutputStream(1 + languageSize + textLength);
-
-            payload.write((byte) (languageSize & 0x1F));
-            payload.write(language, 0, languageSize);
-            payload.write(text, 0, textLength);
-
-            return new NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT, new byte[0], payload.toByteArray());
-
-        } catch (UnsupportedEncodingException e) {
-            Log.e("createTextRecord", e.getMessage());
-        }
-        return null;
-    }
-    private NdefMessage createNdefMessage(String content){
-        NdefRecord ndefRecord = createTextRecord(content);
-        NdefMessage ndefMessage = new NdefMessage(new NdefRecord[]{ndefRecord});
-        return ndefMessage;
-    }
-    public String getTextFromNdefRecord(NdefRecord ndefRecord)
-    {
-        String tagContent = null;
-        try {
-            byte[] payload = ndefRecord.getPayload();
-            String textEncoding = ((payload[0] & 128) == 0) ? "UTF-8" : "UTF-16";
-            int languageSize = payload[0] & 0063;
-            tagContent = new String(payload, languageSize + 1,
-                    payload.length - languageSize - 1, textEncoding);
-        } catch (UnsupportedEncodingException e) {
-            Log.e("getTextFromNdefRecord", e.getMessage(), e);
-        }
-        return tagContent;
-    }
-
 }

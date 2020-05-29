@@ -8,13 +8,16 @@
 
     <TextView
         android:id="@+id/HtmlReqText"
-        android:layout_width="124dp"
-        android:layout_height="68dp"
+        android:layout_width="match_parent"
+        android:layout_height="534dp"
         android:layout_alignEnd="@+id/settingsButton"
+        android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="199dp"
-        android:layout_marginBottom="353dp"
+        android:layout_marginTop="197dp"
+        android:layout_marginEnd="-3dp"
+        android:layout_marginBottom="0dp"
         android:text="NFC Data"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.532"
@@ -41,30 +44,35 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="234dp"
-        android:layout_marginBottom="306dp"
+        android:layout_marginEnd="112dp"
+        android:layout_marginBottom="18dp"
         android:text="Get Data" />
 
     <ToggleButton
         android:id="@+id/tglReadWrite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/txtTagContent"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="111dp"
-        android:layout_marginBottom="303dp"
+        android:layout_marginTop="276dp"
+        android:layout_marginEnd="270dp"
+        android:layout_marginBottom="125dp"
         android:onClick="tglReadWriteOnClick"
         android:text="ToggleButton"
-        android:textOff="Write"
-        android:textOn="Read" />
+        android:textOff="Read"
+        android:textOn="Write" />
 
     <EditText
         android:id="@+id/txtTagContent"
-        android:layout_width="118dp"
-        android:layout_height="94dp"
-        android:layout_above="@+id/tglReadWrite"
+        android:layout_width="wrap_content"
+        android:layout_height="197dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="97dp"
-        android:layout_marginBottom="11dp"
-        android:text="Will be here" />
+        android:layout_marginStart="-3dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="3dp"
+        android:text="Will be here"
+        android:textSize="8sp" />
 </RelativeLayout>
