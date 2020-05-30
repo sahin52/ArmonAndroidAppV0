@@ -25,8 +25,8 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FetchData extends AsyncTask<String,String,String> {
-    String data;
+public class GetUserInfoFromCardId extends AsyncTask<String,String,String> {
+    public String data;
     String result;
     String _organizationId;
     String _grantId;
@@ -36,14 +36,15 @@ public class FetchData extends AsyncTask<String,String,String> {
     String _refreshToken;
     String _tokenExpireTime;
     private static final String UTF_8 = "UTF-8";
+
     @Override
     protected String doInBackground(String... params) {
         try {
-            data="";
+            data="started";
             result="";
             String credentialData = params[0];
             JSONObject requestParams=new JSONObject();
-            requestParams.put("username","sahinkasap");
+            requestParams.put("username","");
             URL url = new URL("https://odtupass-dev.metu.edu.tr/auth/user");
             data+="*0*";
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -82,7 +83,7 @@ public class FetchData extends AsyncTask<String,String,String> {
             httpURLConnection.setRequestProperty("user-agent","armon-api-android-client");
             outputStream = httpURLConnection.getOutputStream();
             bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
-            requestParams.put("password","uWb1QnKB");
+            requestParams.put("password","");
             bufferedWriter.write(requestParams.toString());
             bufferedWriter.flush();
             bufferedWriter.close();
@@ -189,9 +190,6 @@ public class FetchData extends AsyncTask<String,String,String> {
             //ffhfghfh
         }
         return null;
-    }
-    public void run(){
-        execute();
     }
     @Override
     protected void onPostExecute(String aVoid) {
