@@ -40,8 +40,8 @@ public class GetUserInfoFromCardId extends AsyncTask<String,String,String> {
     @Override
     protected String doInBackground(String... params) {
         try {
-            String username = ""; //TODOADDUNPW
-            String password = ""; //TODOADDUNPW
+            String username = "sahinkasap"; //TODOADDUNPW
+            String password = "uWb1QnKB"; //TODOADDUNPW
             data="started";
             result="";
             String credentialData = params[0];

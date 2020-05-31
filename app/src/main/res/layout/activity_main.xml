@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,22 +8,17 @@
 
     <TextView
         android:id="@+id/HtmlReqText"
-        android:layout_width="match_parent"
-        android:layout_height="534dp"
+        android:layout_width="365dp"
+        android:layout_height="356dp"
         android:layout_alignEnd="@+id/settingsButton"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="197dp"
-        android:layout_marginEnd="-3dp"
-        android:layout_marginBottom="0dp"
-        android:text="NFC Data"
-        android:textSize="12sp"
+        android:text="Result will be here"
+        android:textSize="28sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.532"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.297" />
+        app:layout_constraintTop_toBottomOf="@+id/txtTagContent" />
 
     <Button
         android:id="@+id/settingsButton"
@@ -44,33 +39,26 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="112dp"
-        android:layout_marginBottom="18dp"
-        android:text="Get Data" />
-
-    <ToggleButton
-        android:id="@+id/tglReadWrite"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/txtTagContent"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="276dp"
-        android:layout_marginEnd="270dp"
-        android:layout_marginBottom="125dp"
-        android:text="ToggleButton"
-        android:textOff="Read"
-        android:textOn="Write" />
+        android:text="Get Data"
+        app:layout_constraintBottom_toBottomOf="@+id/txtTagContent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.647"
+        app:layout_constraintStart_toEndOf="@+id/txtTagContent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.808" />
 
     <EditText
         android:id="@+id/txtTagContent"
-        android:layout_width="wrap_content"
-        android:layout_height="197dp"
+        android:layout_width="219dp"
+        android:layout_height="88dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="-3dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginEnd="3dp"
-        android:textSize="8sp" />
-</RelativeLayout>
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.161"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.136" />
+</androidx.constraintlayout.widget.ConstraintLayout>

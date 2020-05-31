@@ -8,7 +8,6 @@ import org.json.JSONObject;
 
 public class ArmonApiClient {
     public JSONObject requestHeaders;
-    RawRequest rawRequest;
     public boolean loggedIn;
 
     String _organizationId;
@@ -19,6 +18,7 @@ public class ArmonApiClient {
     String _token;
     String _refreshToken;
     int _tokenExpireTime;
+    String result;
     ArmonApiClient(String domain){
         requestHeaders = new JSONObject();
         apiRoot="https://" + domain;
@@ -39,10 +39,9 @@ public class ArmonApiClient {
     @SuppressLint("StaticFieldLeak")
     public void initAndLogin(final String username, final String password){
         String url = apiRoot + "/auth/user";
-        rawRequest = new RawRequest(){
+        RawRequest rawRequest = new RawRequest(){
             @Override
             protected void onPostExecute(String res){
-                MainActivity.txtTagContent.setText(res);
                 try {
                     JSONObject resultJsonFromInit = new JSONObject(res);
                     JSONArray organizations = resultJsonFromInit.getJSONArray("organizations");
@@ -78,14 +77,13 @@ public class ArmonApiClient {
         RawRequest r = new RawRequest(){
             @Override
             protected void onPostExecute(String res) {
-                MainActivity.txtTagContent.setText(res);
-                JSONObject returnsFromLogin = null;
+                JSONObject returnsFromLogin;
                 try {
                     returnsFromLogin = new JSONObject(res);
                     _token = returnsFromLogin.getString("token");
                     _refreshToken = returnsFromLogin.getString("refreshToken");
                     _tokenExpireTime = returnsFromLogin.getInt("expiresIn");
-                    MainActivity.mainPageText.setText(Integer.toString(_tokenExpireTime));
+                    requestHeaders.put("Authorization","Bearer " + _token);
                 } catch (JSONException e) {
                     MainActivity.mainPageText.setText("Error After Login "+e.toString());
                     e.printStackTrace();
@@ -104,8 +102,43 @@ public class ArmonApiClient {
         }
 
     }
-    public String FindByCredential(String credential){
+    @SuppressLint("StaticFieldLeak")
+    public String FindByCredentialNumber(String credentialData){
+        result = "";
+        String url = organizationRoot + "/member/findbycredential" ;
+        final RawRequest rawRequest = new RawRequest(){
+            @Override
+            protected void onPostExecute(String res) {
+                try {
+                    JSONObject resultJson = new JSONObject(res);
+                    String id = resultJson.getJSONObject("member").getString("id");
+                    String fullname = resultJson.getJSONObject("member").getString("fullname");
+                    String uniqueId = resultJson.getJSONObject("member").getString("uniqueId");
+                    String firstOrganizationName = resultJson.getJSONObject("member").getJSONArray("organizationUnits").getJSONObject(0).getString("name");
+                    String text="ID : "+uniqueId+"\nAd : "+fullname + "\nOrganizasyon : " + firstOrganizationName;
+                    MainActivity.mainPageText.setText(text);
+                } catch (JSONException e) {
+                    String er = "ERROR ON Getting info, please reopen application";
+                    MainActivity.mainPageText.setText(er);
+                    e.printStackTrace();
+                }
 
-        return "";
+                super.onPostExecute(res);
+            }
+        };
+        JSONObject credentialJson = new JSONObject();
+        try {
+            credentialJson.put("credentialType",0);
+            credentialJson.put("credentialData",credentialData);
+            rawRequest.setRequestHeader(requestHeaders);
+            rawRequest.execute("POST",url,credentialJson.toString());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+    public void setResult(String s){
+        result = s;
     }
 }

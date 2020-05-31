@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
 public class MainActivity extends AppCompatActivity {
     private Button settingsButton;
     private Button htmlReqButton;
@@ -60,8 +62,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if(NfcUtil.isTag(intent)){
-            GetUserInfoFromCardId getUserInfoFromCardId = new GetUserInfoFromCardId();
-            getUserInfoFromCardId.execute(NfcUtil.Read(intent));
+            //GetUserInfoFromCardId getUserInfoFromCardId = new GetUserInfoFromCardId();
+            //getUserInfoFromCardId.execute(NfcUtil.Read(intent));
+            armon.FindByCredentialNumber(NfcUtil.Read(intent));
         }else{
             toast("Unknown type of intent/card");
         }

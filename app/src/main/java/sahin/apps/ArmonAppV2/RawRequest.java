@@ -17,11 +17,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class  RawRequest extends AsyncTask<String,String,String> {
-    JSONObject requestHeader;
-    String result = "";
+    private JSONObject requestHeader;
+    private String result = "";
     String errors = "";
+    String Authorization;
     RawRequest(){
         requestHeader = new JSONObject();
+        Authorization = "";
         try {
             requestHeader.put("content-type","application/json");
             requestHeader.put("user-agent","armon-api-android-client");
@@ -46,10 +48,11 @@ public class  RawRequest extends AsyncTask<String,String,String> {
 
             HttpURLConnection httpURLConnection = (HttpURLConnection) Url.openConnection();
             httpURLConnection.setRequestMethod(method);
-
-            JSONObject jsonObject = new JSONObject(data);
             httpURLConnection.setRequestProperty("content-type",requestHeader.getString("content-type"));
             httpURLConnection.setRequestProperty("user-agent",requestHeader.getString("user-agent"));
+            try{
+                httpURLConnection.setRequestProperty("Authorization",requestHeader.getString("Authorization"));
+            }catch(Exception e){}
 
             if(data!=""){
                 OutputStream outputStream = httpURLConnection.getOutputStream();
@@ -67,7 +70,6 @@ public class  RawRequest extends AsyncTask<String,String,String> {
                 jsonResult += line;
                 line = bufferedReader.readLine();
             }
-            result = jsonResult;
             return jsonResult;
         } catch (MalformedURLException e) {
             errors+=e.toString();
@@ -84,6 +86,7 @@ public class  RawRequest extends AsyncTask<String,String,String> {
     public void setRequestHeader(JSONObject rhsRequestHeader){
         this.requestHeader = rhsRequestHeader;
     }
-
-
+    public JSONObject getRequestHeader() {
+        return requestHeader;
+    }
 }
