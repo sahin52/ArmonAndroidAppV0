@@ -34,17 +34,19 @@ public class GetUserInfoFromCardId extends AsyncTask<String,String,String> {
     String apiRoot = "https://odtupass-dev.metu.edu.tr";
     String _token;
     String _refreshToken;
-    String _tokenExpireTime;
+    int _tokenExpireTime;
     private static final String UTF_8 = "UTF-8";
 
     @Override
     protected String doInBackground(String... params) {
         try {
+            String username = ""; //TODOADDUNPW
+            String password = ""; //TODOADDUNPW
             data="started";
             result="";
             String credentialData = params[0];
             JSONObject requestParams=new JSONObject();
-            requestParams.put("username","");
+            requestParams.put("username",username);
             URL url = new URL("https://odtupass-dev.metu.edu.tr/auth/user");
             data+="*0*";
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -69,6 +71,7 @@ public class GetUserInfoFromCardId extends AsyncTask<String,String,String> {
             }
             data+="*2*";
             //MainActivity.txtTagContent.setText(data);
+
             JSONObject returnsFromInit = new JSONObject(jsonResult);
             JSONArray organizations = returnsFromInit.getJSONArray("organizations");
             JSONObject organization = organizations.getJSONObject(0);
@@ -76,6 +79,8 @@ public class GetUserInfoFromCardId extends AsyncTask<String,String,String> {
             _grantId = organization.getJSONArray("authentications").getJSONObject(0).getString("id");
             organizationRoot = "https://odtupass-dev.metu.edu.tr/u/v1/" + _organizationId;
 
+
+            //******************************************LOGIN**************************************************
             url = new URL(apiRoot + "/auth/usernamepass/" + _grantId);
             httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("POST");
@@ -83,7 +88,7 @@ public class GetUserInfoFromCardId extends AsyncTask<String,String,String> {
             httpURLConnection.setRequestProperty("user-agent","armon-api-android-client");
             outputStream = httpURLConnection.getOutputStream();
             bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
-            requestParams.put("password","");
+            requestParams.put("password",password);
             bufferedWriter.write(requestParams.toString());
             bufferedWriter.flush();
             bufferedWriter.close();
@@ -102,12 +107,11 @@ public class GetUserInfoFromCardId extends AsyncTask<String,String,String> {
 
             JSONObject returnsFromLogin = new JSONObject(data);
             _token = returnsFromLogin.getString("token");
-
             _refreshToken = returnsFromLogin.getString("refreshToken");
-            _tokenExpireTime = returnsFromLogin.getString("expiresIn");
+            _tokenExpireTime = returnsFromLogin.getInt("expiresIn");
 
 
-
+            //*********************************Find By Credential**************************
             url = new URL(organizationRoot + "/member/findbycredential");
             HttpURLConnection httpURLConnection2 = (HttpURLConnection) url.openConnection();
             httpURLConnection2.setRequestMethod("POST");

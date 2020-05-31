@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     public static TextView mainPageText;
     public static EditText txtTagContent;
     NfcAdapter nfcAdapter;
-
+    ArmonApiClient armon;
 
 
     @Override
@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
         txtTagContent  =  findViewById(R.id.txtTagContent);
         htmlReqButton = findViewById(R.id.getData);
 
-        ArmonApiClient armon = new ArmonApiClient();
-        armon.initAndLogin("","","odtupass-dev.metu.edu.tr");
+        armon = new ArmonApiClient("odtupass-dev.metu.edu.tr");
+        armon.initAndLogin("","");//TODOADDUNPW
 
         settingsButton.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View v) {    openSettings();   }});
         htmlReqButton.setOnClickListener(new View.OnClickListener() {

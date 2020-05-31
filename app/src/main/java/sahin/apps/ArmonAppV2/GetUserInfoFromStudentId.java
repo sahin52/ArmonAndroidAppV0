@@ -28,9 +28,9 @@ public class GetUserInfoFromStudentId extends AsyncTask<String, String, String> 
 
     @Override
     protected String doInBackground(String... params) {
-        String uniqueId="2264661";
-        String password = "uWb1QnKB";
-        String username = "sahinkasap";
+        String uniqueId="";
+        String password = "";
+        String username = "";
         data = "started";
         try {
             //TODO
