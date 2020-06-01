@@ -142,6 +142,6 @@ public class GetUserInfoFromStudentId extends AsyncTask<String, String, String> 
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
-        MainActivity.txtTagContent.setText(result+ "\n------\n"+data);
+        MainActivity.TCinput.setText(result+ "\n------\n"+data);
     }
 }

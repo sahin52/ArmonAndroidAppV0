@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ODTÜ-Pass</string>
+    <string name="girisViewDefault">Giris Yapılmadı, Uzun Sürerse Kullanıcı Adı ve Şifrenizi Güncelleyip Tekrar Deneyin</string>
+    <string name="TCViewDefault">TC Kimlik Numarası</string>
 </resources>

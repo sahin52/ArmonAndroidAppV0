@@ -12,11 +12,10 @@ import android.widget.Toast;
 
 public class SettingsV2 extends AppCompatActivity {
     public static final String SHARED_PREFS = "sharedPrefs";
-    public static final String SWITCH1 = "switch1";
     public static final String TEXT = "text";
     private Button saveButton;
-    private EditText textname;
-    private Switch aSwitch;
+    private EditText username;
+    private EditText password;
 
     private String text;
     private boolean switchbool;
@@ -25,8 +24,8 @@ public class SettingsV2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_v2);
         saveButton = findViewById(R.id.savebutton);
-        textname = findViewById(R.id.editTect);
-        aSwitch = findViewById(R.id.switch1);
+        username = findViewById(R.id.editTect);
+        password = findViewById(R.id.inputPassword);
         saveButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -40,19 +39,17 @@ public class SettingsV2 extends AppCompatActivity {
     private void saveData(){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(TEXT,textname.getText().toString());
-        editor.putBoolean(SWITCH1,aSwitch.isChecked());
+        editor.putString("username",username.getText().toString());
+        editor.putString("password",password.getText().toString());
         editor.apply();
         Toast.makeText(this,"Saved!",Toast.LENGTH_SHORT).show();
     }
     private void loadData(){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
-        text = sharedPreferences.getString(TEXT,"");
-        switchbool = sharedPreferences.getBoolean(SWITCH1,false);
+        text = sharedPreferences.getString("username","");
         applyThem();
     }
     private void applyThem(){
-        textname.setText(text);
-        aSwitch.setChecked(switchbool);
+        username.setText(text);
     }
 }

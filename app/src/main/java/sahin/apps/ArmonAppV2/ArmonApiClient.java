@@ -5,25 +5,25 @@ import android.annotation.SuppressLint;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+//TODO display by id, so you can direct every search function to it
 public class ArmonApiClient {
     public JSONObject requestHeaders;
-    public boolean loggedIn;
+    public boolean isLoggedIn;
 
-    String _organizationId;
-    String _grantId;
-    String organizationRoot;
+    private String _organizationId;
+    private String _grantId;
+    private String organizationRoot;
     String organizationName;
-    String apiRoot;
-    String _token;
-    String _refreshToken;
-    int _tokenExpireTime;
-    String result;
+    private String apiRoot;
+    private String _token;
+    private String _refreshToken;
+    private int _tokenExpireTime;
+    private String result;
     ArmonApiClient(String domain){
         requestHeaders = new JSONObject();
         apiRoot="https://" + domain;
         try {
-            loggedIn = false;
+            isLoggedIn = false;
             requestHeaders.put("content-type","application/json");
             requestHeaders.put("user-agent","armon-api-android-client");
         } catch (JSONException e) {
@@ -52,7 +52,7 @@ public class ArmonApiClient {
                     login(username,password);
 
                 } catch (JSONException e) {
-                    loggedIn = false;
+                    isLoggedIn = false;
                     e.printStackTrace();
                 }
                 super.onPostExecute(res);
@@ -84,6 +84,8 @@ public class ArmonApiClient {
                     _refreshToken = returnsFromLogin.getString("refreshToken");
                     _tokenExpireTime = returnsFromLogin.getInt("expiresIn");
                     requestHeaders.put("Authorization","Bearer " + _token);
+                    isLoggedIn=true;
+                    MainActivity.girisYapildiView.setText("Giriş Yapıldı");
                 } catch (JSONException e) {
                     MainActivity.mainPageText.setText("Error After Login "+e.toString());
                     e.printStackTrace();
@@ -103,7 +105,7 @@ public class ArmonApiClient {
 
     }
     @SuppressLint("StaticFieldLeak")
-    public String FindByCredentialNumber(String credentialData){
+    public void findByCredentialNumber(String credentialData){
         result = "";
         String url = organizationRoot + "/member/findbycredential" ;
         final RawRequest rawRequest = new RawRequest(){
@@ -136,7 +138,38 @@ public class ArmonApiClient {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return result;
+        return ;
+    }
+    @SuppressLint("StaticFieldLeak")
+    public void findByTCNumberAndDisplay(String TC) {
+        String url = organizationRoot + "/identity/search/exact";
+        RawRequest rawRequest = new RawRequest() {
+            @Override
+            protected void onPostExecute(String res) {
+                try {
+                    JSONObject resultJson = new JSONObject(res);
+                    JSONObject aPerson = resultJson.getJSONArray("items").getJSONObject(0);
+                    String set = aPerson.getString("fullname") + "\n" + aPerson.getJSONArray("organizationUnits").getJSONObject(0).getString("name");
+                    MainActivity.mainPageText.setText(set);
+                } catch (JSONException e) {
+                    String er = "ERROR ON Getting info, please reopen application";
+                    MainActivity.mainPageText.setText(res+er);
+                    e.printStackTrace();
+                }
+            }
+        };
+        JSONObject data = new JSONObject();
+        try {
+            data.put("take",30);
+            data.put("skip",0);
+            JSONObject tcJson = new JSONObject();
+            tcJson.put("uniqueId",TC);
+            data.put("userOrganizationProfile",tcJson);
+            rawRequest.setRequestHeader(requestHeaders);
+            rawRequest.execute("POST",url, data.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
     public void setResult(String s){
         result = s;

@@ -2,8 +2,21 @@
   <dictionary name="sahin kasap">
     <words>
       <w>armon</w>
+      <w>cinput</w>
+      <w>fullname</w>
+      <w>giris</w>
+      <w>giriş</w>
+      <w>hayır</w>
+      <w>kimlik</w>
+      <w>metu</w>
+      <w>numarası</w>
+      <w>odtupass</w>
       <w>odtü</w>
+      <w>sahinkasap</w>
       <w>textname</w>
+      <w>yapildi</w>
+      <w>yapıldı</w>
+      <w>yapılmadı</w>
     </words>
   </dictionary>
 </component>

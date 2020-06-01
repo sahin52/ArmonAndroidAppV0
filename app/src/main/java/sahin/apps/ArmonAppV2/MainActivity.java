@@ -5,9 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.nfc.NfcAdapter;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -15,13 +16,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONObject;
-
 public class MainActivity extends AppCompatActivity {
+    private String username="";//TODOADDUNPW
+    private String password="";
     private Button settingsButton;
     private Button htmlReqButton;
     public static TextView mainPageText;
-    public static EditText txtTagContent;
+    public static EditText TCinput;
+    public static TextView girisYapildiView;
+    public Button retryButton;
     NfcAdapter nfcAdapter;
     ArmonApiClient armon;
 
@@ -32,29 +35,46 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         settingsButton = findViewById(R.id.settingsButton);
         mainPageText = findViewById(R.id.HtmlReqText);
-        txtTagContent  =  findViewById(R.id.txtTagContent);
+        TCinput  =  findViewById(R.id.TCinput);
         htmlReqButton = findViewById(R.id.getData);
+        girisYapildiView = findViewById(R.id.girisYapildiView);
 
         armon = new ArmonApiClient("odtupass-dev.metu.edu.tr");
-        armon.initAndLogin("","");//TODOADDUNPW
+        final SharedPreferences sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE);
+        username = sharedPreferences.getString("username","");
+        password = sharedPreferences.getString("password","");
+        armon.initAndLogin(username,password);
 
         settingsButton.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View v) {    openSettings();   }});
         htmlReqButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GetUserInfoFromStudentId getUserInfoFromStudentId = new GetUserInfoFromStudentId();
-                getUserInfoFromStudentId.execute();
+                if(armon.isLoggedIn){
+                    final String tcInput = String.valueOf(TCinput.getText());
+                    TCinput.setHint(TCinput.getText());
+                    TCinput.setText("");
+                    armon.findByTCNumberAndDisplay(tcInput);
+                    toast(tcInput);
+                }else{
+                    toast("Giris yapılmadan denemeyiniz!");
+                }
             }
         });
-
+        retryButton = findViewById(R.id.retryButton);
+        retryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                username = sharedPreferences.getString("username","");
+                password = sharedPreferences.getString("password","");
+                armon.initAndLogin(username,password);
+            }
+        });
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if(nfcAdapter!=null && nfcAdapter.isEnabled()){
-            Toast.makeText(this,"NFC ENABLED :)",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"NFC AÇIK :)",Toast.LENGTH_SHORT).show();
         }else{
-            Toast.makeText(this,"NFC NOT ENABLED or your phone doesn't support nfc :( \nPlease enable Nfc",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"NFC Okuma Aktif Değil  :( \nLütfen NFC özelliğini aktive edin!",Toast.LENGTH_SHORT).show();
         }
-
-
 
     }
 
@@ -62,13 +82,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if(NfcUtil.isTag(intent)){
-            //GetUserInfoFromCardId getUserInfoFromCardId = new GetUserInfoFromCardId();
-            //getUserInfoFromCardId.execute(NfcUtil.Read(intent));
-            armon.FindByCredentialNumber(NfcUtil.Read(intent));
+            armon.findByCredentialNumber(NfcUtil.Read(intent));
         }else{
-            toast("Unknown type of intent/card");
+            toast("Bilinmeyen Kart veya İstek Türü");
         }
-        toast("Intent");
     }
 
     @Override
