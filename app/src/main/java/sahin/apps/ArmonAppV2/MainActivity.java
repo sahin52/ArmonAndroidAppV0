@@ -2,13 +2,14 @@ package sahin.apps.ArmonAppV2;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
-import android.text.Editable;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -17,26 +18,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    private String username="";//TODOADDUNPW
+    private String username="";
     private String password="";
-    private Button settingsButton;
-    private Button htmlReqButton;
     public static TextView mainPageText;
     public static EditText TCinput;
     public static TextView girisYapildiView;
     public Button retryButton;
     NfcAdapter nfcAdapter;
-    ArmonApiClient armon;
+    public static ArmonApiClient armon;
+    static Activity thisActivity = null;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        settingsButton = findViewById(R.id.settingsButton);
+        thisActivity = this;
+        Button settingsButton = findViewById(R.id.settingsButton);
+        Button htmlReqButton = findViewById(R.id.getData);
+
         mainPageText = findViewById(R.id.HtmlReqText);
         TCinput  =  findViewById(R.id.TCinput);
-        htmlReqButton = findViewById(R.id.getData);
         girisYapildiView = findViewById(R.id.girisYapildiView);
 
         armon = new ArmonApiClient("odtupass-dev.metu.edu.tr");
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
         retryButton = findViewById(R.id.retryButton);
         retryButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,11 +72,12 @@ public class MainActivity extends AppCompatActivity {
                 armon.initAndLogin(username,password);
             }
         });
+
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if(nfcAdapter!=null && nfcAdapter.isEnabled()){
-            Toast.makeText(this,"NFC AÇIK :)",Toast.LENGTH_SHORT).show();
+            toast("NFC AÇIK :)");
         }else{
-            Toast.makeText(this,"NFC Okuma Aktif Değil  :( \nLütfen NFC özelliğini aktive edin!",Toast.LENGTH_SHORT).show();
+            toast("NFC Okuma Aktif Değil  :( \nLütfen NFC özelliğini aktive edin!");
         }
 
     }
@@ -82,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if(NfcUtil.isTag(intent)){
-            armon.findByCredentialNumber(NfcUtil.Read(intent));
+            armon.findByCredentialNumberAndDisplay(NfcUtil.Read(intent));
         }else{
             toast("Bilinmeyen Kart veya İstek Türü");
         }
@@ -120,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
         nfcAdapter.disableForegroundDispatch(this);
     }
 
-    private void toast(String message){
-        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+    public static void toast(String textToToast) {
+        Toast.makeText(thisActivity, textToToast, Toast.LENGTH_SHORT).show();
     }
 }

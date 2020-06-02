@@ -45,16 +45,15 @@ public class  RawRequest extends AsyncTask<String,String,String> {
 
         try {
             URL Url = new URL(url);
-
             HttpURLConnection httpURLConnection = (HttpURLConnection) Url.openConnection();
             httpURLConnection.setRequestMethod(method);
             httpURLConnection.setRequestProperty("content-type",requestHeader.getString("content-type"));
             httpURLConnection.setRequestProperty("user-agent",requestHeader.getString("user-agent"));
             try{
                 httpURLConnection.setRequestProperty("Authorization",requestHeader.getString("Authorization"));
-            }catch(Exception e){}
+            }catch(Exception ignored){ }
 
-            if(data!=""){
+            if(!data.equals("")){
                 OutputStream outputStream = httpURLConnection.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
                 bufferedWriter.write(data);
@@ -71,13 +70,7 @@ public class  RawRequest extends AsyncTask<String,String,String> {
                 line = bufferedReader.readLine();
             }
             return jsonResult;
-        } catch (MalformedURLException e) {
-            errors+=e.toString();
-            e.printStackTrace();
-        } catch (IOException e) {
-            errors+=e.toString();
-            e.printStackTrace();
-        } catch (JSONException e) {
+        } catch (JSONException | IOException e) {
             errors+=e.toString();
             e.printStackTrace();
         }

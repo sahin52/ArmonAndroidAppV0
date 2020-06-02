@@ -53,6 +53,7 @@ public class ArmonApiClient {
 
                 } catch (JSONException e) {
                     isLoggedIn = false;
+                    MainActivity.toast("Giriş yapılamadı! Kullanıcı adınızı kontrol edin!");
                     e.printStackTrace();
                 }
                 super.onPostExecute(res);
@@ -86,8 +87,10 @@ public class ArmonApiClient {
                     requestHeaders.put("Authorization","Bearer " + _token);
                     isLoggedIn=true;
                     MainActivity.girisYapildiView.setText("Giriş Yapıldı");
+                    MainActivity.toast("Giriş Yapıldı");
                 } catch (JSONException e) {
-                    MainActivity.mainPageText.setText("Error After Login "+e.toString());
+                    MainActivity.girisYapildiView.setText("Giriş Yapılırken hata oluştu");
+                    MainActivity.toast("Giriş yapılamadı!");
                     e.printStackTrace();
                 }
                 super.onPostExecute(res);
@@ -99,13 +102,13 @@ public class ArmonApiClient {
             UnPw.put("password",password);
             r.execute("POST",apiRoot+"/auth/usernamepass/" + _grantId,UnPw.toString());
         } catch (Exception e) {
-            MainActivity.mainPageText.setText("ERROR ON AAC"+e.toString());
+            MainActivity.mainPageText.setText("Armon Api'de belirsiz hata oluştu"+e.toString());
             e.printStackTrace();
         }
 
     }
     @SuppressLint("StaticFieldLeak")
-    public void findByCredentialNumber(String credentialData){
+    public void findByCredentialNumberAndDisplay(String credentialData){
         result = "";
         String url = organizationRoot + "/member/findbycredential" ;
         final RawRequest rawRequest = new RawRequest(){
@@ -138,7 +141,6 @@ public class ArmonApiClient {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return ;
     }
     @SuppressLint("StaticFieldLeak")
     public void findByTCNumberAndDisplay(String TC) {
@@ -149,7 +151,12 @@ public class ArmonApiClient {
                 try {
                     JSONObject resultJson = new JSONObject(res);
                     JSONObject aPerson = resultJson.getJSONArray("items").getJSONObject(0);
-                    String set = aPerson.getString("fullname") + "\n" + aPerson.getJSONArray("organizationUnits").getJSONObject(0).getString("name");
+                    String set = aPerson.getString("fullname");
+                    JSONArray orgUnits = aPerson.getJSONArray("organizationUnits");
+                    int len = orgUnits.length();
+                    for(int i=0;i<len;i++) {
+                        set += "\n" + aPerson.getJSONArray("organizationUnits").getJSONObject(i).getString("name");
+                    }
                     MainActivity.mainPageText.setText(set);
                 } catch (JSONException e) {
                     String er = "ERROR ON Getting info, please reopen application";
