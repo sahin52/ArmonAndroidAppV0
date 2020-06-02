@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 
+import java.math.BigInteger;
+
 public class NfcUtil {
     private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
 
@@ -17,6 +19,9 @@ public class NfcUtil {
                 Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
                 byte[] tagIdBytes = tag.getId();
                 CardId = bytesToHex(tagIdBytes);
+                BigInteger CardNumber = new BigInteger(CardId , 16);
+                CardId = String.valueOf(CardNumber);
+                MainActivity.toast(CardId);
             }
         }
         return CardId;

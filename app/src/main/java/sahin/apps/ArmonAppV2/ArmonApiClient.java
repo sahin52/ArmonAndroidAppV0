@@ -124,7 +124,8 @@ public class ArmonApiClient {
                     MainActivity.mainPageText.setText(text);
                 } catch (JSONException e) {
                     String er = "ERROR ON Getting info, please reopen application";
-                    MainActivity.mainPageText.setText(er);
+                    String erres = er+res;
+                    MainActivity.mainPageText.setText(erres);
                     e.printStackTrace();
                 }
 
