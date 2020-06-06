@@ -33,7 +33,7 @@ public class GetUserInfoFromStudentId extends AsyncTask<String, String, String> 
         String username = "";
         data = "started";
         try {
-            //TODO
+            //TODO Useless now
             /*result = "";
             //String credentialData = params[0];
             JSONObject requestParams = new JSONObject();

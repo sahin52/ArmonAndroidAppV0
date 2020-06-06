@@ -18,7 +18,6 @@ public class ArmonApiClient {
     private String _token;
     private String _refreshToken;
     private int _tokenExpireTime;
-    private String result;
     ArmonApiClient(String domain){
         requestHeaders = new JSONObject();
         apiRoot="https://" + domain;
@@ -37,7 +36,7 @@ public class ArmonApiClient {
      * init and login on Armon
      */
     @SuppressLint("StaticFieldLeak")
-    public void initAndLogin(final String username, final String password){
+    public void initAndLogin(final String username, final String password, final String organizationToBeLoggedIn){
         String url = apiRoot + "/auth/user";
         RawRequest rawRequest = new RawRequest(){
             @Override
@@ -45,15 +44,17 @@ public class ArmonApiClient {
                 try {
                     JSONObject resultJsonFromInit = new JSONObject(res);
                     JSONArray organizations = resultJsonFromInit.getJSONArray("organizations");
-                    JSONObject organization = organizations.getJSONObject(0);//TODO index might change
+
+                    JSONObject organization = chooseOrganization(organizations,organizationToBeLoggedIn);//TODO index might change
+
                     _organizationId = organization.getString("id");
                     _grantId = organization.getJSONArray("authentications").getJSONObject(0).getString("id");
                     organizationRoot = apiRoot+"/u/v1/" + _organizationId;
-                    login(username,password);
+                    login(username,password,organizationToBeLoggedIn);
 
                 } catch (JSONException e) {
                     isLoggedIn = false;
-                    MainActivity.toast("Giriş yapılamadı! Kullanıcı adınızı kontrol edin!");
+                    MainActivity.toast("Giriş yapılamadı! Kullanıcı adı-şifrenizi kontrol edin!");
                     e.printStackTrace();
                 }
                 super.onPostExecute(res);
@@ -70,11 +71,13 @@ public class ArmonApiClient {
         rawRequest.execute("POST",url,usernameJson.toString());
     }
 
+
+
     /**
      * Main login after init
      */
     @SuppressLint("StaticFieldLeak")
-    private void login(String username, String password) {
+    private void login(String username, String password, String organizationToBeLoggedIn) {
         RawRequest r = new RawRequest(){
             @Override
             protected void onPostExecute(String res) {
@@ -109,7 +112,6 @@ public class ArmonApiClient {
     }
     @SuppressLint("StaticFieldLeak")
     public void findByCredentialNumberAndDisplay(String credentialData){
-        result = "";
         String url = organizationRoot + "/member/findbycredential" ;
         final RawRequest rawRequest = new RawRequest(){
             @Override
@@ -123,12 +125,11 @@ public class ArmonApiClient {
                     String text="ID : "+uniqueId+"\nAd : "+fullname + "\nOrganizasyon : " + firstOrganizationName;
                     MainActivity.mainPageText.setText(text);
                 } catch (JSONException e) {
-                    String er = "ERROR ON Getting info, please reopen application";
+                    String er = "ERROR ON Getting info, please reopen application ";
                     String erres = er+res;
                     MainActivity.mainPageText.setText(erres);
                     e.printStackTrace();
                 }
-
                 super.onPostExecute(res);
             }
         };
@@ -164,6 +165,7 @@ public class ArmonApiClient {
                     MainActivity.mainPageText.setText(res+er);
                     e.printStackTrace();
                 }
+                super.onPostExecute(res);
             }
         };
         JSONObject data = new JSONObject();
@@ -179,7 +181,62 @@ public class ArmonApiClient {
             e.printStackTrace();
         }
     }
-    public void setResult(String s){
-        result = s;
+    @SuppressLint("StaticFieldLeak")
+    public void findByUserId(String userId){
+        String url;
+        String data;
+        String method;
+        RawRequest rawRequest = new RawRequest(){
+            @Override
+            protected void onPostExecute(String s) {
+                try{
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                super.onPostExecute(s);
+            }
+        };
+        rawRequest.setRequestHeader(requestHeaders);
+        rawRequest.execute();
+    }
+    @SuppressLint("StaticFieldLeak")
+    public void findByOdtuId(String odtuId){
+        RawRequest rawRequest = new RawRequest(){
+            @Override
+            protected void onPostExecute(String s) {
+                try{
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                super.onPostExecute(s);
+            }
+        };
+        rawRequest.setRequestHeader(requestHeaders);
+        rawRequest.execute();
+    }
+
+
+    //Helper functions -- Not main things
+    private JSONObject chooseOrganization(JSONArray organizations,String organizationToBeLoggedIn) throws JSONException {
+        JSONObject res = null;
+        int sizeOfJson = organizations.length();
+        for(int i=0;i<sizeOfJson;i++){
+            if(organizations.getJSONObject(i).getString("name").equals(organizationToBeLoggedIn)){
+                res = organizations.getJSONObject(i);
+            }
+        }
+        if(res==null) {
+            if(organizations.length()>1){
+                String string = "Organizasyon bulunamadı, İlk organizasyon seçildi: "+organizations.getJSONObject(0).getString("name") +"Diğer organizasyonlar:";
+                for(int i =0; i< organizations.length();i++){
+                    string +=  "\n" + organizations.getJSONObject(i).getString("name");
+                }
+                MainActivity.toast(string);
+            }else{
+                MainActivity.toast("Organizasyon bulunamadı, var olan tek organizasyon seçildi: " + organizations.getJSONObject(0).getString("name"));
+            }
+            res = organizations.getJSONObject(0);
+        }
+        return res;
     }
 }

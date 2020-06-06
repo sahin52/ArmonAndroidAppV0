@@ -11,7 +11,7 @@
         android:id="@+id/HtmlReqText"
         android:layout_width="wrap_content"
         android:layout_height="38dp"
-        android:text="Settings"
+        android:text="Ayarlar"
         android:textAlignment="center"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,7 +25,7 @@
         android:layout_width="305dp"
         android:layout_height="64dp"
         android:layout_gravity="center_horizontal"
-        android:hint="UserName"
+        android:hint="Kullanıcı adı"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -40,22 +40,47 @@
         android:text="Kaydet ve Giriş Yap"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.87"
+        app:layout_constraintHorizontal_bias="0.858"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.53" />
+        app:layout_constraintTop_toBottomOf="@+id/inputPassword"
+        app:layout_constraintVertical_bias="0.247" />
 
     <EditText
         android:id="@+id/inputPassword"
         android:layout_width="302dp"
         android:layout_height="58dp"
         android:ems="10"
-        android:hint="Password"
+        android:hint="Şifre"
         android:inputType="textPassword"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/editTect"
         app:layout_constraintStart_toStartOf="@+id/editTect"
         app:layout_constraintTop_toBottomOf="@+id/editTect"
         app:layout_constraintVertical_bias="0.034" />
+
+    <EditText
+        android:id="@+id/organizationInput"
+        android:layout_width="301dp"
+        android:layout_height="52dp"
+        android:ems="10"
+        android:hint="Organizasyon"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/inputPassword"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/inputPassword"
+        app:layout_constraintTop_toBottomOf="@+id/inputPassword"
+        app:layout_constraintVertical_bias="0.04" />
+
+    <TextView
+        android:id="@+id/loginResInput"
+        android:layout_width="324dp"
+        android:layout_height="205dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/organizationInput"
+        app:layout_constraintVertical_bias="0.648" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

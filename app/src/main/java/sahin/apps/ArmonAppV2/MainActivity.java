@@ -4,10 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.view.Menu;
@@ -20,6 +20,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
     private String username="";
     private String password="";
+    private String organization="";
     public static TextView mainPageText;
     public static EditText TCinput;
     public static TextView girisYapildiView;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         thisActivity = this;
         Button settingsButton = findViewById(R.id.settingsButton);
         Button htmlReqButton = findViewById(R.id.getData);
@@ -45,7 +47,8 @@ public class MainActivity extends AppCompatActivity {
         final SharedPreferences sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE);
         username = sharedPreferences.getString("username","");
         password = sharedPreferences.getString("password","");
-        armon.initAndLogin(username,password);
+        organization = sharedPreferences.getString("organization","");
+        armon.initAndLogin(username,password,organization);
 
         settingsButton.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View v) {    openSettings();   }});
         htmlReqButton.setOnClickListener(new View.OnClickListener() {
@@ -69,7 +72,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 username = sharedPreferences.getString("username","");
                 password = sharedPreferences.getString("password","");
-                armon.initAndLogin(username,password);
+                organization = sharedPreferences.getString("organization","");
+                armon.initAndLogin(username,password,organization);
             }
         });
 
