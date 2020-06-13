@@ -23,8 +23,8 @@
     <Button
         android:id="@+id/settingsButton"
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="3dp"
@@ -43,9 +43,10 @@
         android:text="Öğren"
         app:layout_constraintBottom_toBottomOf="@+id/TCinput"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.566"
+        app:layout_constraintHorizontal_bias="0.728"
         app:layout_constraintStart_toEndOf="@+id/TCinput"
-        app:layout_constraintTop_toTopOf="@+id/TCinput" />
+        app:layout_constraintTop_toTopOf="@+id/TCinput"
+        app:layout_constraintVertical_bias="0.538" />
 
     <EditText
         android:id="@+id/TCinput"
@@ -60,10 +61,10 @@
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.094"
+        app:layout_constraintHorizontal_bias="0.135"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.211" />
+        app:layout_constraintVertical_bias="0.165" />
 
     <TextView
         android:id="@+id/girisYapildiView"

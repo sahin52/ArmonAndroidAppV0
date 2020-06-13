@@ -26,6 +26,7 @@ public class ArmonApiClient {
             requestHeaders.put("content-type","application/json");
             requestHeaders.put("user-agent","armon-api-android-client");
         } catch (JSONException e) {
+            MainActivity.mainPageText.setText("Hata oluştu: hata kodu H005");
             e.printStackTrace();
         }
 
@@ -54,7 +55,7 @@ public class ArmonApiClient {
 
                 } catch (JSONException e) {
                     isLoggedIn = false;
-                    MainActivity.toast("Giriş yapılamadı! Kullanıcı adı-şifrenizi kontrol edin!");
+                    MainActivity.toast("Giriş yapılamadı! Kullanıcı adı-şifrenizi kontrol edin! ");
                     e.printStackTrace();
                 }
                 super.onPostExecute(res);
@@ -64,7 +65,7 @@ public class ArmonApiClient {
         try {
             usernameJson.put("username",username);
         } catch (JSONException e) {
-            MainActivity.mainPageText.setText(e.toString());
+            MainActivity.mainPageText.setText("Hata oluştu: hata kodu H006\n"+e.toString());
             e.printStackTrace();
         }
         rawRequest.setRequestHeader(requestHeaders);
@@ -92,7 +93,7 @@ public class ArmonApiClient {
                     MainActivity.girisYapildiView.setText("Giriş Yapıldı");
                     MainActivity.toast("Giriş Yapıldı");
                 } catch (JSONException e) {
-                    MainActivity.girisYapildiView.setText("Giriş Yapılırken hata oluştu");
+                    MainActivity.girisYapildiView.setText("Giriş Yapılırken hata oluştu- şifrenizi kontrol edin");
                     MainActivity.toast("Giriş yapılamadı!");
                     e.printStackTrace();
                 }
@@ -105,7 +106,7 @@ public class ArmonApiClient {
             UnPw.put("password",password);
             r.execute("POST",apiRoot+"/auth/usernamepass/" + _grantId,UnPw.toString());
         } catch (Exception e) {
-            MainActivity.mainPageText.setText("Armon Api'de belirsiz hata oluştu"+e.toString());
+            MainActivity.mainPageText.setText("Armon Api'de belirsiz hata oluştu\n"+e.toString());
             e.printStackTrace();
         }
 
@@ -125,7 +126,7 @@ public class ArmonApiClient {
                     String text="ID : "+uniqueId+"\nAd : "+fullname + "\nOrganizasyon : " + firstOrganizationName;
                     MainActivity.mainPageText.setText(text);
                 } catch (JSONException e) {
-                    String er = "ERROR ON Getting info, please reopen application ";
+                    String er = "Kart bilgisi bulunurken hata oluştu\n";
                     String erres = er+res;
                     MainActivity.mainPageText.setText(erres);
                     e.printStackTrace();
@@ -141,6 +142,7 @@ public class ArmonApiClient {
             rawRequest.execute("POST",url,credentialJson.toString());
 
         } catch (JSONException e) {
+            MainActivity.mainPageText.setText("Hata oluştu: hata kodu H001");
             e.printStackTrace();
         }
     }
@@ -161,8 +163,8 @@ public class ArmonApiClient {
                     }
                     MainActivity.mainPageText.setText(set);
                 } catch (JSONException e) {
-                    String er = "ERROR ON Getting info, please reopen application";
-                    MainActivity.mainPageText.setText(res+er);
+                    String er = "Numaradan bilgi bulunurken hata oluştu\n";
+                    MainActivity.mainPageText.setText(er+res);
                     e.printStackTrace();
                 }
                 super.onPostExecute(res);
@@ -178,6 +180,7 @@ public class ArmonApiClient {
             rawRequest.setRequestHeader(requestHeaders);
             rawRequest.execute("POST",url, data.toString());
         } catch (JSONException e) {
+            MainActivity.mainPageText.setText("Hata oluştu: hata kodu H002");
             e.printStackTrace();
         }
     }
@@ -191,6 +194,7 @@ public class ArmonApiClient {
             protected void onPostExecute(String s) {
                 try{
                 }catch (Exception e){
+                    MainActivity.mainPageText.setText("Hata oluştu: hata kodu H003");
                     e.printStackTrace();
                 }
                 super.onPostExecute(s);
@@ -206,6 +210,7 @@ public class ArmonApiClient {
             protected void onPostExecute(String s) {
                 try{
                 }catch (Exception e){
+                    MainActivity.mainPageText.setText("Hata oluştu: hata kodu H004");
                     e.printStackTrace();
                 }
                 super.onPostExecute(s);

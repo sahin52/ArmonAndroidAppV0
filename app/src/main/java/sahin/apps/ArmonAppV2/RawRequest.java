@@ -51,7 +51,9 @@ public class  RawRequest extends AsyncTask<String,String,String> {
             httpURLConnection.setRequestProperty("user-agent",requestHeader.getString("user-agent"));
             try{
                 httpURLConnection.setRequestProperty("Authorization",requestHeader.getString("Authorization"));
-            }catch(Exception ignored){ }
+            }catch(Exception ignored){
+
+            }
 
             if(!data.equals("")){
                 OutputStream outputStream = httpURLConnection.getOutputStream();

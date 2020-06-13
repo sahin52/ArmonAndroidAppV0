@@ -83,4 +83,12 @@
         app:layout_constraintTop_toBottomOf="@+id/organizationInput"
         app:layout_constraintVertical_bias="0.648" />
 
+    <Button
+        android:id="@+id/BackToMainActivityButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/back_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
