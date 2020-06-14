@@ -18,7 +18,7 @@
  [12:29 PM] Bos ise veya gecersiz ise (tckn < 9) 'Lutfen gecerli bir tckn giriniz' tarzi bir uyari
  [12:30 PM] Simdilik bos tckn'de test de edilebilir, sonuc cikmayinca veya hata alinca 'Bir hata olustu: [Varsa ek hata mesaji]'
  //[12:31 PM] Sag alttaki ayarlar ikonu biraz daha kucuk olmali
- [12:31 PM] Ayarlar sayfasindan 'Geri Don'
+ //[12:31 PM] Ayarlar sayfasindan 'Geri Don'
  [12:32 PM] Gerektigi yerlere ikonlar
  [12:32 PM] Mesela Kimlik kutucuklarinda duruma gore kart veya arac ikonlari
  [12:33 PM] Kullanici Gruplari da gozukmeli sonuc kisminda

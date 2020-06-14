@@ -5,6 +5,8 @@ import android.annotation.SuppressLint;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+
 //TODO display by id, so you can direct every search function to it
 public class ArmonApiClient {
     public JSONObject requestHeaders;
@@ -18,6 +20,9 @@ public class ArmonApiClient {
     private String _token;
     private String _refreshToken;
     private int _tokenExpireTime;
+    private String _name;
+    private String _surname;
+    //private  loginTime;
     ArmonApiClient(String domain){
         requestHeaders = new JSONObject();
         apiRoot="https://" + domain;
@@ -90,11 +95,19 @@ public class ArmonApiClient {
                     _tokenExpireTime = returnsFromLogin.getInt("expiresIn");
                     requestHeaders.put("Authorization","Bearer " + _token);
                     isLoggedIn=true;
-                    MainActivity.girisYapildiView.setText("Giriş Yapıldı");
+                    _name = returnsFromLogin.getJSONObject("organization").getJSONObject("organizationProfile").getString("name");
+                    _surname = returnsFromLogin.getJSONObject("organization").getJSONObject("organizationProfile").getString("surname");
+                    String girisYapildiViewText = "Giriş Yapıldı\n"+"Merhaba "+_name +" "+_surname;
+                    _tokenExpireTime = returnsFromLogin.getInt("expiresIn");
+
+
+
+
+                    MainActivity.girisYapildiView.setText(girisYapildiViewText);
                     MainActivity.toast("Giriş Yapıldı");
                 } catch (JSONException e) {
-                    MainActivity.girisYapildiView.setText("Giriş Yapılırken hata oluştu- şifrenizi kontrol edin");
-                    MainActivity.toast("Giriş yapılamadı!");
+                    MainActivity.girisYapildiView.setText("Giriş Yapılırken hata oluştu - şifrenizi kontrol edin");
+                    MainActivity.toast("Giriş Yapılamadı!");
                     e.printStackTrace();
                 }
                 super.onPostExecute(res);
@@ -243,5 +256,10 @@ public class ArmonApiClient {
             res = organizations.getJSONObject(0);
         }
         return res;
+    }
+
+    public boolean isLoggedIn() {//TODO
+        //if(!isLoggedIn || ){ }
+        return true;
     }
 }
