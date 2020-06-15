@@ -15,6 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class GetUserInfoFromStudentId extends AsyncTask<String, String, String> {
+    //////USELESSSS//////USELESSSS
     public String data = "";
     String result;
     String _organizationId;

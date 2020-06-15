@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GetUserInfoFromCardId extends AsyncTask<String,String,String> {
+    //////USELESSSS
     public String data;
     String result;
     String _organizationId;

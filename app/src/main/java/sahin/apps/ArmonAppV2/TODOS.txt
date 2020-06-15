@@ -22,3 +22,5 @@
  [12:32 PM] Gerektigi yerlere ikonlar
  [12:32 PM] Mesela Kimlik kutucuklarinda duruma gore kart veya arac ikonlari
  [12:33 PM] Kullanici Gruplari da gozukmeli sonuc kisminda
+
+ //+Splash Screed
