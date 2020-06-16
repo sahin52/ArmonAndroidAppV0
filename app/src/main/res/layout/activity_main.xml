@@ -9,8 +9,8 @@
 
     <TextView
         android:id="@+id/HtmlReqText"
-        android:layout_width="365dp"
-        android:layout_height="356dp"
+        android:layout_width="296dp"
+        android:layout_height="173dp"
         android:layout_alignEnd="@+id/settingsButton"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
@@ -19,8 +19,10 @@
         android:textSize="28sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.452"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TCinput" />
+        app:layout_constraintTop_toBottomOf="@+id/TCinput"
+        app:layout_constraintVertical_bias="0.061" />
 
     <Button
         android:id="@+id/settingsButton"
@@ -53,7 +55,7 @@
     <EditText
         android:id="@+id/TCinput"
         android:layout_width="241dp"
-        android:layout_height="74dp"
+        android:layout_height="53dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
@@ -65,15 +67,15 @@
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.135"
+        app:layout_constraintHorizontal_bias="0.094"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.165" />
+        app:layout_constraintVertical_bias="0.124" />
 
     <TextView
         android:id="@+id/girisYapildiView"
-        android:layout_width="268dp"
-        android:layout_height="42dp"
+        android:layout_width="267dp"
+        android:layout_height="50dp"
         android:text="@string/girisViewDefault"
         android:textAlignment="center"
         android:textColor="#000000"
@@ -82,7 +84,7 @@
         app:layout_constraintHorizontal_bias="0.111"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.35" />
+        app:layout_constraintVertical_bias="0.222" />
 
     <Button
         android:id="@+id/retryButton"
@@ -93,7 +95,56 @@
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/girisYapildiView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.589"
+        app:layout_constraintHorizontal_bias="0.68"
         app:layout_constraintStart_toEndOf="@+id/girisYapildiView"
-        app:layout_constraintTop_toTopOf="@+id/girisYapildiView" />
+        app:layout_constraintTop_toTopOf="@+id/girisYapildiView"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/fullNameResultTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="fullNameResultTextView"
+        tools:layout_editor_absoluteX="70dp"
+        tools:layout_editor_absoluteY="337dp" />
+
+    <TextView
+        android:id="@+id/uniqueIdResultTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="uniqueIdResultTextView"
+        tools:layout_editor_absoluteX="66dp"
+        tools:layout_editor_absoluteY="376dp" />
+
+    <TextView
+        android:id="@+id/userGoupsResultTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="userGoupsResultTextView"
+        tools:layout_editor_absoluteX="66dp"
+        tools:layout_editor_absoluteY="431dp" />
+
+    <TextView
+        android:id="@+id/organizationUnitsResultTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="organizationUnitsResultTextView"
+        tools:layout_editor_absoluteX="65dp"
+        tools:layout_editor_absoluteY="467dp" />
+
+    <TextView
+        android:id="@+id/odtuNumbersResultTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="odtuNumbersResultTextView"
+        tools:layout_editor_absoluteX="71dp"
+        tools:layout_editor_absoluteY="511dp" />
+
+    <TextView
+        android:id="@+id/credentialsResultTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="credentialsResultTextView"
+        tools:layout_editor_absoluteX="69dp"
+        tools:layout_editor_absoluteY="556dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

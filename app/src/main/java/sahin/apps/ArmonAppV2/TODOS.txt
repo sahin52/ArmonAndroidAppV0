@@ -24,3 +24,6 @@
  [12:33 PM] Kullanici Gruplari da gozukmeli sonuc kisminda
 
  //+Splash Screed
+
+
+ Ana sayfaya bigtaus yazısı ve resmi ekle
