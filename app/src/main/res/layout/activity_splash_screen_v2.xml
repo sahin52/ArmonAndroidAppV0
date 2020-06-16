@@ -9,17 +9,17 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="413dp"
-        android:layout_height="334dp"
+        android:layout_width="420dp"
+        android:layout_height="258dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="100dp"
         android:layout_marginEnd="10dp"
         android:src="@drawable/odtu"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.101" />
 
     <TextView
         android:id="@+id/textView"
@@ -34,6 +34,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.847" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="134dp"
+        android:layout_height="119dp"
+        android:src="@drawable/loadingtransparent3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.896" />
+        app:layout_constraintVertical_bias="0.623" />
 </androidx.constraintlayout.widget.ConstraintLayout>
