@@ -9,20 +9,20 @@
 
     <TextView
         android:id="@+id/HtmlReqText"
-        android:layout_width="296dp"
-        android:layout_height="173dp"
+        android:layout_width="288dp"
+        android:layout_height="100dp"
         android:layout_alignEnd="@+id/settingsButton"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
         android:text="Sonuç Burada Olacak"
         android:textColor="#000000"
-        android:textSize="28sp"
+        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.452"
+        app:layout_constraintHorizontal_bias="0.146"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TCinput"
-        app:layout_constraintVertical_bias="0.061" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/settingsButton"
@@ -102,49 +102,153 @@
 
     <TextView
         android:id="@+id/fullNameResultTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="fullNameResultTextView"
-        tools:layout_editor_absoluteX="70dp"
-        tools:layout_editor_absoluteY="337dp" />
+        android:layout_width="181dp"
+        android:layout_height="39dp"
+        app:layout_constraintBottom_toTopOf="@+id/uniqueIdResultTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.795"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/HtmlReqText"
+        app:layout_constraintVertical_bias="0.72" />
 
     <TextView
         android:id="@+id/uniqueIdResultTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="uniqueIdResultTextView"
-        tools:layout_editor_absoluteX="66dp"
-        tools:layout_editor_absoluteY="376dp" />
+        android:layout_width="190dp"
+        android:layout_height="27dp"
+        app:layout_constraintBottom_toTopOf="@+id/userGroupsResultTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/fullNameResultTextView"
+        app:layout_constraintTop_toBottomOf="@+id/HtmlReqText"
+        app:layout_constraintVertical_bias="0.785" />
 
     <TextView
-        android:id="@+id/userGoupsResultTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="userGoupsResultTextView"
-        tools:layout_editor_absoluteX="66dp"
-        tools:layout_editor_absoluteY="431dp" />
+        android:id="@+id/userGroupsResultTextView"
+        android:layout_width="190dp"
+        android:layout_height="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/organizationUnitsResultTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/fullNameResultTextView"
+        app:layout_constraintTop_toBottomOf="@+id/HtmlReqText"
+        app:layout_constraintVertical_bias="0.85" />
 
     <TextView
         android:id="@+id/organizationUnitsResultTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="organizationUnitsResultTextView"
-        tools:layout_editor_absoluteX="65dp"
-        tools:layout_editor_absoluteY="467dp" />
+        android:layout_width="183dp"
+        android:layout_height="36dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/odtuNumbersResultTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/fullNameResultTextView"
+        app:layout_constraintTop_toBottomOf="@+id/HtmlReqText"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/odtuNumbersResultTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="odtuNumbersResultTextView"
-        tools:layout_editor_absoluteX="71dp"
-        tools:layout_editor_absoluteY="511dp" />
+        android:layout_width="194dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="80dp"
+        app:layout_constraintBottom_toTopOf="@+id/credentialsResultTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/fullNameResultTextView"
+        app:layout_constraintTop_toBottomOf="@+id/HtmlReqText"
+        app:layout_constraintVertical_bias="0.791" />
 
     <TextView
         android:id="@+id/credentialsResultTextView"
+        android:layout_width="199dp"
+        android:layout_height="43dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/fullNameResultTextView"
+        app:layout_constraintTop_toBottomOf="@+id/HtmlReqText"
+        app:layout_constraintVertical_bias="0.888" />
+
+    <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="credentialsResultTextView"
-        tools:layout_editor_absoluteX="69dp"
-        tools:layout_editor_absoluteY="556dp" />
+        android:text="İsim:"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/fullNameResultTextView"
+        app:layout_constraintEnd_toStartOf="@+id/fullNameResultTextView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/HtmlReqText"
+        app:layout_constraintTop_toTopOf="@+id/fullNameResultTextView"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tekil Id:"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/uniqueIdResultTextView"
+        app:layout_constraintEnd_toStartOf="@+id/uniqueIdResultTextView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/HtmlReqText"
+        app:layout_constraintTop_toTopOf="@+id/uniqueIdResultTextView"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Kullanıcı grupları:"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/userGroupsResultTextView"
+        app:layout_constraintEnd_toStartOf="@+id/userGroupsResultTextView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/HtmlReqText"
+        app:layout_constraintTop_toTopOf="@+id/userGroupsResultTextView"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Organizasyonları:"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/organizationUnitsResultTextView"
+        app:layout_constraintEnd_toStartOf="@+id/organizationUnitsResultTextView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/HtmlReqText"
+        app:layout_constraintTop_toTopOf="@+id/organizationUnitsResultTextView"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Odtu Numaraları:"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/odtuNumbersResultTextView"
+        app:layout_constraintEnd_toStartOf="@+id/odtuNumbersResultTextView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/HtmlReqText"
+        app:layout_constraintTop_toTopOf="@+id/odtuNumbersResultTextView"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Kimlikleri:"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/credentialsResultTextView"
+        app:layout_constraintEnd_toStartOf="@+id/credentialsResultTextView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/HtmlReqText"
+        app:layout_constraintTop_toTopOf="@+id/credentialsResultTextView"
+        app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

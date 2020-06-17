@@ -21,9 +21,17 @@ public class MainActivity extends AppCompatActivity {
     private String username="";
     private String password="";
     private String organization="";
+
     public static TextView mainPageText;
     public static EditText TCinput;
     public static TextView girisYapildiView;
+    public static TextView fullNameResultTextView;
+    public static TextView uniqueIdResultTextView;
+    public static TextView userGroupsResultTextView;
+    public static TextView organizationUnitsResultTextView;
+    public static TextView odtuNumbersResultTextView;
+    public static TextView credentialsResultTextView;
+
     public Button retryButton;
     NfcAdapter nfcAdapter;
     public static ArmonApiClient armon;
@@ -39,9 +47,16 @@ public class MainActivity extends AppCompatActivity {
         Button settingsButton = findViewById(R.id.settingsButton);
         Button htmlReqButton = findViewById(R.id.getData);
 
+
+        girisYapildiView = findViewById(R.id.girisYapildiView);
         mainPageText = findViewById(R.id.HtmlReqText);
         TCinput  =  findViewById(R.id.TCinput);
-        girisYapildiView = findViewById(R.id.girisYapildiView);
+        fullNameResultTextView = findViewById(R.id.fullNameResultTextView);
+        uniqueIdResultTextView = findViewById(R.id.uniqueIdResultTextView);
+        userGroupsResultTextView = findViewById(R.id.userGroupsResultTextView);
+        organizationUnitsResultTextView = findViewById(R.id.organizationUnitsResultTextView);
+        odtuNumbersResultTextView = findViewById(R.id.odtuNumbersResultTextView);
+        credentialsResultTextView = findViewById(R.id.credentialsResultTextView);
 
         armon = new ArmonApiClient("odtupass-dev.metu.edu.tr");
         final SharedPreferences sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE);
@@ -54,6 +69,13 @@ public class MainActivity extends AppCompatActivity {
         htmlReqButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mainPageText.setText("");
+                fullNameResultTextView.setText("");
+                uniqueIdResultTextView.setText("");
+                userGroupsResultTextView.setText("");
+                organizationUnitsResultTextView.setText("");
+                odtuNumbersResultTextView.setText("");
+                credentialsResultTextView.setText("");
                 if(armon.isLoggedIn){
                     final String tcInput = String.valueOf(TCinput.getText());
                     TCinput.setHint(TCinput.getText());
@@ -90,6 +112,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if(NfcUtil.isTag(intent)){
+            mainPageText.setText("");
+            TCinput.setText("");
+            fullNameResultTextView.setText("");
+            uniqueIdResultTextView.setText("");
+            userGroupsResultTextView.setText("");
+            organizationUnitsResultTextView.setText("");
+            odtuNumbersResultTextView.setText("");
+            credentialsResultTextView.setText("");
             armon.findByCredentialNumberAndDisplay(NfcUtil.Read(intent));
         }else{
             toast("Bilinmeyen Kart veya İstek Türü");

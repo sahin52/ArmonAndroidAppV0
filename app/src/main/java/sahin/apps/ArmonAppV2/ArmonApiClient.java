@@ -39,10 +39,10 @@ public class ArmonApiClient {
 
 
     /**
-     * init and login on Armon
+     * init and login on Armon, takes username password and organization to log in with and tries to login for being able to get info.
      */
     @SuppressLint("StaticFieldLeak")
-    public void initAndLogin(final String username, final String password, final String organizationToBeLoggedIn){
+    public void initAndLogin(final String username, final String password, final String organizationToBeLoggedIn){ //DONE
         String url = apiRoot + "/auth/user";
         RawRequest rawRequest = new RawRequest(){
             @Override
@@ -80,10 +80,10 @@ public class ArmonApiClient {
 
 
     /**
-     * Main login after init
+     * Main login after init. Here will use password to be able to log in
      */
     @SuppressLint("StaticFieldLeak")
-    private void login(String username, String password, String organizationToBeLoggedIn) {
+    private void login(String username, String password, String organizationToBeLoggedIn) {//DONE
         RawRequest r = new RawRequest(){
             @Override
             protected void onPostExecute(String res) {
@@ -124,8 +124,13 @@ public class ArmonApiClient {
         }
 
     }
+
+    /**
+     * When a card is read by NFC, this function will be called
+     * @param credentialData credential numarasi
+     */
     @SuppressLint("StaticFieldLeak")
-    public void findByCredentialNumberAndDisplay(String credentialData){
+    public void findByCredentialNumberAndDisplay(String credentialData){ //TODO display etmeyi duzenle ve logged in olup olmadigini kontrol et
         String url = organizationRoot + "/member/findbycredential" ;
         final RawRequest rawRequest = new RawRequest(){
             @Override
@@ -135,9 +140,25 @@ public class ArmonApiClient {
                     String id = resultJson.getJSONObject("member").getString("id");
                     String fullname = resultJson.getJSONObject("member").getString("fullname");
                     String uniqueId = resultJson.getJSONObject("member").getString("uniqueId");
+                    String allOrganizations="";
+                    String allUserGroups="";
+                    int orgUnitsLen = resultJson.getJSONObject("member").getJSONArray("organizationUnits").length();
+                    for(int i=0;i<orgUnitsLen;i++){
+                        allOrganizations= allOrganizations + resultJson.getJSONObject("member").getJSONArray("organizationUnits").getJSONObject(i).getString("name")+"\n";
+                    }
                     String firstOrganizationName = resultJson.getJSONObject("member").getJSONArray("organizationUnits").getJSONObject(0).getString("name");
                     String text="ID : "+uniqueId+"\nAd : "+fullname + "\nOrganizasyon : " + firstOrganizationName;
+                    int UserGorupsLen = resultJson.getJSONObject("member").getJSONArray("userGroups").length();
+                    for(int i=0;i<UserGorupsLen;i++){
+                        allUserGroups= allUserGroups + resultJson.getJSONObject("member").getJSONArray("userGroups").getJSONObject(i).getString("name")+"\n";
+                    }
+
                     MainActivity.mainPageText.setText(text);
+                    MainActivity.fullNameResultTextView.setText(fullname);
+                    MainActivity.uniqueIdResultTextView.setText(uniqueId);
+                    MainActivity.organizationUnitsResultTextView.setText(allOrganizations);
+                    MainActivity.userGroupsResultTextView.setText(allUserGroups);
+
                 } catch (JSONException e) {
                     String er = "Kart bilgisi bulunurken hata oluştu\n";
                     String erres = er+res;
@@ -168,12 +189,20 @@ public class ArmonApiClient {
                 try {
                     JSONObject resultJson = new JSONObject(res);
                     JSONObject aPerson = resultJson.getJSONArray("items").getJSONObject(0);
+                    String fullname = aPerson.getString("fullname");
+                    String uniqueID=aPerson.getString("uniqueId");
+                    String organizationUnits="";
                     String set = aPerson.getString("fullname");
                     JSONArray orgUnits = aPerson.getJSONArray("organizationUnits");
                     int len = orgUnits.length();
                     for(int i=0;i<len;i++) {
+                        organizationUnits+=aPerson.getJSONArray("organizationUnits").getJSONObject(i).getString("name");
                         set += "\n" + aPerson.getJSONArray("organizationUnits").getJSONObject(i).getString("name");
                     }
+
+                    MainActivity.uniqueIdResultTextView.setText(uniqueID);
+                    MainActivity.fullNameResultTextView.setText(fullname);
+                    MainActivity.organizationUnitsResultTextView.setText(organizationUnits);
                     MainActivity.mainPageText.setText(set);
                 } catch (JSONException e) {
                     String er = "Numaradan bilgi bulunurken hata oluştu\n";
@@ -197,15 +226,21 @@ public class ArmonApiClient {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Finds Details and Puts them in MainActivity TextViews
+     * @param userId
+     */
     @SuppressLint("StaticFieldLeak")
-    public void findByUserId(String userId){
-        String url;
-        String data;
-        String method;
+    public void findByUserIdAndDisPlay(String userId){ //TODO Find By User Id
+        String url="";
+        String data="";
+        String method="";
         RawRequest rawRequest = new RawRequest(){
             @Override
             protected void onPostExecute(String s) {
                 try{
+
                 }catch (Exception e){
                     MainActivity.mainPageText.setText("Hata oluştu: hata kodu H003");
                     e.printStackTrace();
@@ -214,10 +249,10 @@ public class ArmonApiClient {
             }
         };
         rawRequest.setRequestHeader(requestHeaders);
-        rawRequest.execute();
+        rawRequest.execute(method,url,data);
     }
     @SuppressLint("StaticFieldLeak")
-    public void findByOdtuId(String odtuId){
+    public void findByOdtuId(String odtuId){//TODO Find By Odtu Id
         RawRequest rawRequest = new RawRequest(){
             @Override
             protected void onPostExecute(String s) {
@@ -261,5 +296,8 @@ public class ArmonApiClient {
     public boolean isLoggedIn() {//TODO
         //if(!isLoggedIn || ){ }
         return true;
+    }
+    public void trialFunc(){
+
     }
 }
