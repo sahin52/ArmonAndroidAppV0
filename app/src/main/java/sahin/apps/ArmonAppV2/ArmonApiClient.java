@@ -6,6 +6,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.concurrent.Callable;
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 
 //TODO display by id, so you can direct every search function to it
 public class ArmonApiClient {
@@ -137,7 +141,8 @@ public class ArmonApiClient {
             protected void onPostExecute(String res) {
                 try {
                     JSONObject resultJson = new JSONObject(res);
-                    String id = resultJson.getJSONObject("member").getString("id");
+                    String userId = resultJson.getJSONObject("member").getString("id");
+                    findByUserIdAndDisPlay(userId);
                     String fullname = resultJson.getJSONObject("member").getString("fullname");
                     String uniqueId = resultJson.getJSONObject("member").getString("uniqueId");
                     String allOrganizations="";
@@ -181,7 +186,7 @@ public class ArmonApiClient {
         }
     }
     @SuppressLint("StaticFieldLeak")
-    public void findByTCNumberAndDisplay(String TC) {
+    public void findByTCNumberAndDisplay(String TC) { //TODO User Groupları ekle
         String url = organizationRoot + "/identity/search/exact";
         RawRequest rawRequest = new RawRequest() {
             @Override
@@ -189,6 +194,8 @@ public class ArmonApiClient {
                 try {
                     JSONObject resultJson = new JSONObject(res);
                     JSONObject aPerson = resultJson.getJSONArray("items").getJSONObject(0);
+                    String userId = aPerson.getString("id");
+                    findByUserIdAndDisPlay(userId);
                     String fullname = aPerson.getString("fullname");
                     String uniqueID=aPerson.getString("uniqueId");
                     String organizationUnits="";
@@ -229,23 +236,37 @@ public class ArmonApiClient {
 
     /**
      * Finds Details and Puts them in MainActivity TextViews
-     * @param userId
+     * @param userId Id of the user
      */
     @SuppressLint("StaticFieldLeak")
     public void findByUserIdAndDisPlay(String userId){ //TODO Find By User Id
-        String url="";
+        String url=organizationRoot + "/identity/detailed/"+userId;
         String data="";
-        String method="";
+        String method="GET";
         RawRequest rawRequest = new RawRequest(){
             @Override
-            protected void onPostExecute(String s) {
+            protected void onPostExecute(String res) {
                 try{
+                    //MainActivity.mainPageText.setText(s);
+                    String credentialsText = "";
+                    String odtuNumbersText = "";
+                    JSONObject resAsJson= new JSONObject(res);
+                    int numbersLen = resAsJson.getJSONObject("organizationProfile").getJSONObject("extensionFields").getJSONArray("numbers").length();
+                    for(int i=0;i<numbersLen;i++)
+                        odtuNumbersText += resAsJson.getJSONObject("organizationProfile").getJSONObject("extensionFields").getJSONArray("numbers").getString(i)+"\n";
 
+                    int credentialsLen = resAsJson.getJSONArray("credentials").length();
+                    for(int i=0;i<credentialsLen;i++) {
+                        credentialsText+= "Tip: " + resAsJson.getJSONArray("credentials").getJSONObject(i).getString("type");
+                        credentialsText+= " Bilgi:"+ resAsJson.getJSONArray("credentials").getJSONObject(i).getString("data") +"\n";
+                    }
+                    MainActivity.credentialsResultTextView.setText(credentialsText);
+                    MainActivity.odtuNumbersResultTextView.setText(odtuNumbersText);
                 }catch (Exception e){
-                    MainActivity.mainPageText.setText("Hata oluştu: hata kodu H003");
+                    MainActivity.mainPageText.setText("Hata oluştu: hata kodu H003\n"+e.toString());
                     e.printStackTrace();
                 }
-                super.onPostExecute(s);
+                super.onPostExecute(res);
             }
         };
         rawRequest.setRequestHeader(requestHeaders);
@@ -297,7 +318,12 @@ public class ArmonApiClient {
         //if(!isLoggedIn || ){ }
         return true;
     }
-    public void trialFunc(){
+    public void trialFunc(Callable<Integer> myFunc){
+        try {
+            myFunc.call();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 }

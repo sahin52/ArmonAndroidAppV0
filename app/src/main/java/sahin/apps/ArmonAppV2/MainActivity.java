@@ -17,6 +17,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.concurrent.Callable;
+
 public class MainActivity extends AppCompatActivity {
     private String username="";
     private String password="";
@@ -101,10 +103,17 @@ public class MainActivity extends AppCompatActivity {
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if(nfcAdapter!=null && nfcAdapter.isEnabled()){
-            toast("NFC AÇIK :)");
+            //toast("NFC AÇIK :)");
         }else{
             toast("NFC Okuma Aktif Değil  :( \nLütfen NFC özelliğini aktive edin!");
         }
+        //armon.trialFunc(new Callable<Integer>() {
+        //    @Override
+        //    public Integer call() throws Exception {
+        //        toast("123");
+        //        return 0;
+        //    }
+        //});
 
     }
 
