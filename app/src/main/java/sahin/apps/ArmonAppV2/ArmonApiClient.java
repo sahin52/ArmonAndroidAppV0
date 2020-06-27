@@ -7,11 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.concurrent.Callable;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
-
-//TODO display by id, so you can direct every search function to it
 public class ArmonApiClient {
     public JSONObject requestHeaders;
     public boolean isLoggedIn;
@@ -44,6 +40,7 @@ public class ArmonApiClient {
 
     /**
      * init and login on Armon, takes username password and organization to log in with and tries to login for being able to get info.
+     * Users may have more than one organization, the 3rd parameter is for this.
      */
     @SuppressLint("StaticFieldLeak")
     public void initAndLogin(final String username, final String password, final String organizationToBeLoggedIn){ //DONE
